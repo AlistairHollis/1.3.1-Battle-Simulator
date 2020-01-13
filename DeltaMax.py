@@ -1,13 +1,18 @@
 import turtle
 import time
 import random
-#name = {"ATTACK","DEFENSE","SPEED","HEALTH"}
-Bob = {"Name":"Bob","ATK":10,"DEF":6,"SP":7,"HP":100}
-John = {"Name":"John","ATK":1,"DEF":8,"SP":5,"HP":100}
+#name = {"ATTACK","DEFENSE","SPEED","HEALTH","TURTLE"}
+Bob = {"Name":"Bob","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
+John = {"Name":"John","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
 
-#turtle1 = turtle.Turtle()
+Bob["TRTL"].pu()
+John["TRTL"].pu()
+Bob["TRTL"].goto( -100,0)
+John["TRTL"].goto(100,0)
+John["TRTL"].setheading(180)
+Bob["TRTL"].speed(1)
+John["TRTL"].speed(1)
 base_damage = 10
-
 choice = "blank"
 
 def damage_calc(damage,attacker,defender): #used to register an attack
@@ -20,6 +25,8 @@ def damage_calc(damage,attacker,defender): #used to register an attack
     percent = 20
   print(str(percent) + "% to hit")
   if random.randint(0,100) < percent: #Runs percent check
+    attack_animation(attacker["TRTL"],defender["TRTL"])# activates attack animation
+
     #Calculates damage
     if(attacker["ATK"]<defender["DEF"]): #Applies a debuff if defender has a higher defense than attackers attack
       damage = damage-((damage*defender["DEF"])/100)
@@ -43,6 +50,23 @@ def enemyai(): #used to decide the enemy's action
     damage_calc(base_damage,John,Bob)
   else:
     print("The enemy waits")
+
+def attack_animation(attacker,defender): #function to run attack animation
+  oldxcor = attacker.xcor()
+  oldycor = attacker.ycor()
+  if defender.xcor() >0:
+    attacker.goto((defender.xcor()-15),defender.ycor())
+  elif defender.xcor() == 0:
+    if defender.ycor() >0:
+      attacker.goto(defender.xcor(),defender.ycor()-15)
+    else:
+      attacker.goto(defender.xcor(),defender.ycor()+15)
+  else:
+    attacker.goto((defender.xcor()+15),defender.ycor())
+  defender.backward(5)
+  time.sleep(.3)
+  defender.forward(5)
+  attacker.goto(oldxcor,oldycor)
 
 while (Bob["HP"] > 0) and (John["HP"] > 0): #keeps battle running if both players are alive
   choice = "blank"
