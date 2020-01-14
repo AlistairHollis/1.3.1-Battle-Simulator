@@ -3,15 +3,34 @@ import time
 import random
 #name = {"ATTACK","DEFENSE","SPEED","HEALTH","TURTLE"}
 Bob = {"Name":"Bob","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
+Billy = {"Name":"Billy","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
 John = {"Name":"John","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
+Joey = {"Name":"Joey","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
 
-Bob["TRTL"].pu()
-John["TRTL"].pu()
-Bob["TRTL"].goto( -100,0)
-John["TRTL"].goto(100,0)
-John["TRTL"].setheading(180)
-Bob["TRTL"].speed(1)
-John["TRTL"].speed(1)
+all_characters = [Bob, Billy, John, Joey]
+player_team = [Bob, Billy]
+enemy_team = [John, Joey]
+
+for b in all_characters:
+  b["TRTL"].pu()
+  b["TRTL"].speed(0)
+
+Bob["TRTL"].goto( -100,-50)
+John["TRTL"].goto(100,-50)
+Joey["TRTL"].goto(100, 50)
+Billy["TRTL"].goto(-100, 50)
+
+for a in enemy_team:
+  a["TRTL"].setheading(180)
+for b in all_characters:
+  b["TRTL"].speed(1)
+#Bob["TRTL"].pu()
+#John["TRTL"].pu()
+
+
+#John["TRTL"].setheading(180)
+#Bob["TRTL"].speed(1)
+#John["TRTL"].speed(1)
 base_damage = 10
 choice = "blank"
 
@@ -42,12 +61,18 @@ def damage_calc(damage,attacker,defender): #used to register an attack
     print("miss")
   print( "\n" + Bob["Name"]+ " "+str(Bob["HP"]))
   print(John["Name"]+ " "+str(John["HP"]))
-print("You encounter John, destroyer of worlds!")
+print("You encounter " + enemy_team[0]["Name"] + ", destroyer of worlds!")
 
 def enemyai(): #used to decide the enemy's action
-  enemy_choice = random.randint(1,2)
+  enemy_choice = random.randint(1,4)
   if enemy_choice == 1:
-    damage_calc(base_damage,John,Bob)
+    damage_calc(base_damage,enemy_team[0],player_team[0])
+  elif enemy_choice == 2:
+    damage_calc(base_damage,enemy_team[0],player_team[1])
+  elif enemy_choice == 3:
+    damage_calc(base_damage,enemy_team[1],player_team[0])
+  elif enemy_choice == 4:
+    damage_calc(base_damage,enemy_team[1],player_team[1])
   else:
     print("The enemy waits")
 
@@ -68,11 +93,13 @@ def attack_animation(attacker,defender): #function to run attack animation
   defender.forward(5)
   attacker.goto(oldxcor,oldycor)
 
-while (Bob["HP"] > 0) and (John["HP"] > 0): #keeps battle running if both players are alive
+while ((Bob["HP"] > 0) or (Billy["HP"] > 0)) and ((John["HP"] > 0) or (Joey["HP"] > 0)): #keeps battle running if both players are alive
   choice = "blank"
   choice = input("Choose your action.\n (Type ATK or RUN)")
   if choice == "ATK":
-      damage_calc(base_damage,Bob,John)
+      attacker_choice = int(input("Which charactor do you want to be the attacker?( 0 for "player_team[0]["Name"] ", 1 for "player_team[1]["Name"]))
+      defender_choice = input("Which charactor is going to be attacked?( 0 for "player_team[0]["Name"] ", 1 for "player_team[1]["Name"]")
+      damage_calc(base_damage,player_team[attacker_choice],defender_choice)
       #print("\n" + Bob["Name"]+ " "+str(Bob["HP"]))
       #print(John["Name"]+ " "+str(John["HP"]))
       
