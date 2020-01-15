@@ -24,18 +24,12 @@ for a in enemy_team:
   a["TRTL"].setheading(180)
 for b in all_characters:
   b["TRTL"].speed(1)
-#Bob["TRTL"].pu()
-#John["TRTL"].pu()
 
-
-#John["TRTL"].setheading(180)
-#Bob["TRTL"].speed(1)
-#John["TRTL"].speed(1)
 base_damage = 10
 choice = "blank"
 
 def damage_calc(damage,attacker,defender): #used to register an attack
-  print(attacker["Name"] + " attacks " + defender["Name"] + "!")
+  print("\n" + attacker["Name"] + " attacks " + defender["Name"] + "!")
   #Calculates speed percentage
   percent = round((attacker["SP"]/defender["SP"])*100)
   if percent > 95:
@@ -56,12 +50,17 @@ def damage_calc(damage,attacker,defender): #used to register an attack
       defender["HP"] = 0 #Add victory check
     else: #Applies damage
       defender["HP"] = defender["HP"]-round(damage)
-    print(damage)
+    #print(damage)
   else:
     print("miss")
-  print( "\n" + Bob["Name"]+ " "+str(Bob["HP"]))
-  print(John["Name"]+ " "+str(John["HP"]))
-print("You encounter " + enemy_team[0]["Name"] + ", destroyer of worlds!")
+  print("\n")
+  for p in all_characters:
+    print(p["Name"]+ " "+str(p["HP"]))
+
+
+  #print( "\n" + Bob["Name"]+ " "+str(Bob["HP"]))
+  #print(John["Name"]+ " "+str(John["HP"]))
+
 
 def enemyai(): #used to decide the enemy's action
   enemy_choice = random.randint(1,4)
@@ -93,13 +92,17 @@ def attack_animation(attacker,defender): #function to run attack animation
   defender.forward(5)
   attacker.goto(oldxcor,oldycor)
 
+print("You encounter " + enemy_team[0]["Name"] + ", destroyer of worlds!")
+
 while ((Bob["HP"] > 0) or (Billy["HP"] > 0)) and ((John["HP"] > 0) or (Joey["HP"] > 0)): #keeps battle running if both players are alive
   choice = "blank"
   choice = input("Choose your action.\n (Type ATK or RUN)")
   if choice == "ATK":
-      attacker_choice = int(input("Which charactor do you want to be the attacker?( 0 for "player_team[0]["Name"] ", 1 for "player_team[1]["Name"]))
-      defender_choice = input("Which charactor is going to be attacked?( 0 for "player_team[0]["Name"] ", 1 for "player_team[1]["Name"]")
-      damage_calc(base_damage,player_team[attacker_choice],defender_choice)
+      attacker_choice = int(input("Which charactor do you want to be the attacker?( 1 for " + player_team[0]["Name"] + ", 2 for " + player_team[1]["Name"] + " )"))
+      defender_choice = int(input("Which charactor is going to be attacked?( 1 for " + enemy_team[0]["Name"] + ", 2 for " + enemy_team[1]["Name"] + " )"))
+      attacker_choice -=1
+      defender_choice -=1
+      damage_calc(base_damage,player_team[attacker_choice],enemy_team[defender_choice])
       #print("\n" + Bob["Name"]+ " "+str(Bob["HP"]))
       #print(John["Name"]+ " "+str(John["HP"]))
       
