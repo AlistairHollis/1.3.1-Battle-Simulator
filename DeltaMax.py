@@ -2,38 +2,37 @@ import turtle
 import time
 import random
 #name = {"ATTACK","DEFENSE","SPEED","HEALTH","TURTLE"}
-sprites = {"Bob":"playerstanding.gif","Billy":"playerstanding.gif","John":"test","Joey":"test"}
+sprites = {"Bob":"playerstanding.gif","Billy":"playerstanding.gif","John":"enemystanding.gif","Joey":"enemystanding.gif"}
 moving_sprites = {"Bob":"playerwalking.gif","Billy":"playerwalking.gif","John":"test","Joey":"test"}
 Bob = {"Name":"Bob","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
 Billy = {"Name":"Billy","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
 John = {"Name":"John","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
 Joey = {"Name":"Joey","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
 
-bobsprite = "playerstanding.gif"
-
 wn = turtle.Screen()
-wn.addshape(bobsprite)
 
 all_characters = [Bob, Billy, John, Joey]
 player_team = [Bob, Billy]
 enemy_team = [John, Joey]
 
-Bob["TRTL"].shape(bobsprite)
+for people in all_characters:
+  wn.addshape(sprites[people["Name"]])
 
 for b in all_characters:
   b["TRTL"].pu()
   b["TRTL"].speed(0)
-  #b["TRTL"].shape(sprites[str(b)])
+  b["TRTL"].shape(sprites[str(b["Name"])])
 
-Bob["TRTL"].goto( -100,-50)
-John["TRTL"].goto(100,-50)
-Joey["TRTL"].goto(100, 50)
-Billy["TRTL"].goto(-100, 50)
+Bob["TRTL"].goto( -200,-150)
+John["TRTL"].goto(200,-150)
+Joey["TRTL"].goto(200, 150)
+Billy["TRTL"].goto(-200, 150)
 
 for a in enemy_team:
   a["TRTL"].setheading(180)
-for b in all_characters:
-  b["TRTL"].speed(1)
+  a["TRTL"].speed(2)
+for b in player_team:
+  b["TRTL"].speed(3)
 
 base_damage = 10
 choice = "blank"
@@ -108,8 +107,8 @@ while ((Bob["HP"] > 0) or (Billy["HP"] > 0)) and ((John["HP"] > 0) or (Joey["HP"
   choice = "blank"
   choice = input("Choose your action.\n (Type ATK or RUN)")
   if choice == "ATK":
-      attacker_choice = int(input("Which charactor do you want to be the attacker?( 1 for " + player_team[0]["Name"] + ", 2 for " + player_team[1]["Name"] + " )"))
-      defender_choice = int(input("Which charactor is going to be attacked?( 1 for " + enemy_team[0]["Name"] + ", 2 for " + enemy_team[1]["Name"] + " )"))
+      attacker_choice = int(input("Which charactor do you want to be the attacker?(1 for " + player_team[0]["Name"] + ", 2 for " + player_team[1]["Name"] + ")"))
+      defender_choice = int(input("Which charactor is going to be attacked?(1 for " + enemy_team[0]["Name"] + ", 2 for " + enemy_team[1]["Name"] + ")"))
       attacker_choice -=1
       defender_choice -=1
       damage_calc(base_damage,player_team[attacker_choice],enemy_team[defender_choice])
