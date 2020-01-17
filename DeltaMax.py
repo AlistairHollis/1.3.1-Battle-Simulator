@@ -3,7 +3,6 @@ import time
 import random
 #name = {"ATTACK","DEFENSE","SPEED","HEALTH","TURTLE"}
 sprites = {"Bob":"playerstanding.gif","Billy":"playerstanding.gif","John":"enemystanding.gif","Joey":"enemystanding.gif"}
-moving_sprites = {"Bob":"playerwalking.gif","Billy":"playerwalking.gif","John":"test","Joey":"test"}
 Bob = {"Name":"Bob","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
 Billy = {"Name":"Billy","ATK":10,"DEF":6,"SP":7,"HP":100,"TRTL":turtle.Turtle()}
 John = {"Name":"John","ATK":1,"DEF":8,"SP":5,"HP":100,"TRTL":turtle.Turtle()}
@@ -23,6 +22,7 @@ for b in all_characters:
   b["TRTL"].speed(0)
   b["TRTL"].shape(sprites[str(b["Name"])])
 
+
 Bob["TRTL"].goto( -200,-150)
 John["TRTL"].goto(200,-150)
 Joey["TRTL"].goto(200, 150)
@@ -34,11 +34,13 @@ for a in enemy_team:
 for b in player_team:
   b["TRTL"].speed(3)
 
-base_damage = 10
+base_damage = 20
 choice = "blank"
 
 def damage_calc(damage,attacker,defender): #used to register an attack
   print("\n" + attacker["Name"] + " attacks " + defender["Name"] + "!")
+  if attacker["HP"] == 0:
+    print(attacker["Name"] + " is dead.")
   #Calculates speed percentage
   percent = round((attacker["SP"]/defender["SP"])*100)
   if percent > 95:
@@ -57,6 +59,8 @@ def damage_calc(damage,attacker,defender): #used to register an attack
 
     if((defender["HP"]-damage) < 0): #checks to see if enemy is dead
       defender["HP"] = 0 #Add victory check
+      defender["TRTL"].ht()
+      print(defender["Name"] + " is dead.")
     else: #Applies damage
       defender["HP"] = defender["HP"]-round(damage)
     #print(damage)
@@ -66,13 +70,9 @@ def damage_calc(damage,attacker,defender): #used to register an attack
   for p in all_characters:
     print(p["Name"]+ " "+str(p["HP"]))
 
-
-  #print( "\n" + Bob["Name"]+ " "+str(Bob["HP"]))
-  #print(John["Name"]+ " "+str(John["HP"]))
-
-
 def enemyai(): #used to decide the enemy's action
   enemy_choice = random.randint(1,4)
+  time.sleep(1)
   if enemy_choice == 1:
     damage_calc(base_damage,enemy_team[0],player_team[0])
   elif enemy_choice == 2:
@@ -108,22 +108,28 @@ while ((Bob["HP"] > 0) or (Billy["HP"] > 0)) and ((John["HP"] > 0) or (Joey["HP"
   choice = input("Choose your action.\n (Type ATK or RUN)")
   if choice == "ATK":
       attacker_choice = int(input("Which charactor do you want to be the attacker?(1 for " + player_team[0]["Name"] + ", 2 for " + player_team[1]["Name"] + ")"))
-      defender_choice = int(input("Which charactor is going to be attacked?(1 for " + enemy_team[0]["Name"] + ", 2 for " + enemy_team[1]["Name"] + ")"))
-      attacker_choice -=1
-      defender_choice -=1
-      damage_calc(base_damage,player_team[attacker_choice],enemy_team[defender_choice])
-      #print("\n" + Bob["Name"]+ " "+str(Bob["HP"]))
-      #print(John["Name"]+ " "+str(John["HP"]))
+      if (attacker_choice <= len(player_team)) and (attacker_choice >=1):
+        defender_choice = int(input("Which charactor is going to be attacked?(1 for " + enemy_team[0]["Name"] + ", 2 for " + enemy_team[1]["Name"] + ")"))
+        if (defender_choice <= len(enemy_team)) and (defender_choice >=1):
+          attacker_choice -=1
+          defender_choice -=1
+          damage_calc(base_damage,player_team[attacker_choice],enemy_team[defender_choice])
+        else:
+          print("That number isn't an option")
+      else:
+        print("That number isn't an option")
       
   elif choice == "RUN":
       print("You are a weakling")
       break
+  else:
+    print("READ THE COMMANDS!!!")
   enemyai()
   #print( "\n" + Bob["Name"]+ " "+str(Bob["HP"]))
   #print(John["Name"]+ " "+str(John["HP"]))
   print("------------Next Turn!------------")
-print("Choice Loop Exited")
-
+print("------------GAME OVER!------------")
+wn.bye()
 
 
 wn.mainloop()
