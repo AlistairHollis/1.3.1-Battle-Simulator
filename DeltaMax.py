@@ -130,6 +130,3 @@ while ((Bob["HP"] > 0) or (Billy["HP"] > 0)) and ((John["HP"] > 0) or (Joey["HP"
   print("------------Next Turn!------------")
 print("------------GAME OVER!------------")
 wn.bye()
-
-
-wn.mainloop()
